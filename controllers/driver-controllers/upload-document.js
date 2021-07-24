@@ -32,6 +32,7 @@ exports.uploadDocument = async (req, res) => {
   } catch (err) {
     res.status(400).json({
       isUploaded: false,
+      error : err
     });
   }
 };
