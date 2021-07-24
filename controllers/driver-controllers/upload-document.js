@@ -16,7 +16,7 @@ exports.uploadDocument = async (req, res) => {
 
   const bucket = admin.storage().bucket();
   try {
-    const response = await bucket.upload(documentFile.path, {
+    const response = await bucket.upload(documentFile, {
       predefinedAcl: "publicRead",
       contentType: documentFile.type,
       destination: "DriverDocuments/"+localId+"/"+ documentTitle,
