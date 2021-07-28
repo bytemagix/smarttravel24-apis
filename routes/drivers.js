@@ -12,7 +12,7 @@ const router = express.Router();
 router.post('/register-driver',registerDriverController.postRegisterDriver);
 router.get('/get-new-registration',getNewRegistrationController.getNewRegistration);
 router.post('/approve-driver',approveDriverController.postApproveDriver);
-router.get('/get-driver-info',getDriverInfoController.getDriverInfo);
+router.post('/get-driver-info',getDriverInfoController.getDriverInfo);
 router.get('/get-approved-drivers',getApprovedDriverController.getApprovedDrivers);
 router.post('/upload-document',documentUploadController.uploadDocument);
 

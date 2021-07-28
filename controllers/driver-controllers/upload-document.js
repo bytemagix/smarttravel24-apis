@@ -13,10 +13,12 @@ exports.uploadDocument = async (req, res) => {
   const localId = req.fields.localId;
   const documentTitle = req.fields.documentTitle;
   const documentFile = req.files.file;
+  console.log(documentTitle);
+  console.log(documentFile);
 
   const bucket = admin.storage().bucket();
   try {
-    const response = await bucket.upload(documentFile, {
+    const response = await bucket.upload(documentFile.path, {
       predefinedAcl: "publicRead",
       contentType: documentFile.type,
       destination: "DriverDocuments/"+localId+"/"+ documentTitle,
@@ -30,6 +32,7 @@ exports.uploadDocument = async (req, res) => {
       documentUrl: url,
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       isUploaded: false,
       error : err
