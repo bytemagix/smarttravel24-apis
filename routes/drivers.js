@@ -6,6 +6,7 @@ const approveDriverController = require('../controllers/driver-controllers/appro
 const getDriverInfoController = require('../controllers/driver-controllers/get-driver-info');
 const getApprovedDriverController = require('../controllers/driver-controllers/get-approved-drivers');
 const documentUploadController = require('../controllers/driver-controllers/upload-document');
+const toogleStatusContoller = require('../controllers/driver-controllers/toogle-status');
 
 const router = express.Router();
 
@@ -15,5 +16,6 @@ router.post('/approve-driver',approveDriverController.postApproveDriver);
 router.post('/get-driver-info',getDriverInfoController.getDriverInfo);
 router.get('/get-approved-drivers',getApprovedDriverController.getApprovedDrivers);
 router.post('/upload-document',documentUploadController.uploadDocument);
+router.post('/toogle-status',toogleStatusContoller.toogleStatus);
 
 module.exports = router;

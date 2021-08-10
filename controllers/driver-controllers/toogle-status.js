@@ -9,40 +9,32 @@ if (!admin.apps.length) {
   });
 }
 
-exports.postRegisterDriver = async (req, res) => {
+exports.toogleStatus = async (req, res) => {
   try {
     const formData = req.fields;
 
-    const driverInfo = JSON.parse(formData.driverInfo);
-    const carInfo = JSON.parse(formData.carInfo);
-    const documentUrls = JSON.parse(formData.documentUrls);
-    const location = JSON.parse(formData.location);
-    const status = JSON.parse(formData.status);
-
-    const driverId = driverInfo.driverId;
+    const driverId = formData.driverId;
+    const status = formData.status;
 
     const db = admin.database();
     const dbResponse = await db
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
+      .child("status")
       .set({
-        driverInfo: driverInfo,
-        carInfo: carInfo,
-        documentUrls: documentUrls,
-        location: location,
-        status: status,
+          driverStatus : status,
       });
 
     const dbResponseData = await dbResponse.json();
 
     res.status(200).json({
-      isDriverAdded: true,
+      isStatusChanged: true,
       message: "OK",
     });
   } catch (err) {
     res.status(400).json({
-      isDriverAdded: false,
+      isStatusChanged: false,
       error: err,
     });
   }
