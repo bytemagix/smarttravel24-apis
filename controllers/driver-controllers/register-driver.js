@@ -17,7 +17,7 @@ exports.postRegisterDriver = async (req, res) => {
     const carInfo = JSON.parse(formData.carInfo);
     const documentUrls = JSON.parse(formData.documentUrls);
     const location = JSON.parse(formData.location);
-    const status = JSON.parse(formData.status);
+    const status = formData.status
 
     const driverId = driverInfo.driverId;
 
@@ -31,7 +31,7 @@ exports.postRegisterDriver = async (req, res) => {
         carInfo: carInfo,
         documentUrls: documentUrls,
         location: location,
-        status: status,
+        status: {driverStatus: status},
       });
 
     const dbResponseData = await dbResponse.json();

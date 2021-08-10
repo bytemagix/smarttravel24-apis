@@ -15,6 +15,8 @@ exports.toogleStatus = async (req, res) => {
 
     const driverId = formData.driverId;
     const status = formData.status;
+    console.log(status);
+    console.log(formData);
 
     const db = admin.database();
     const dbResponse = await db
@@ -25,8 +27,6 @@ exports.toogleStatus = async (req, res) => {
       .set({
           driverStatus : status,
       });
-
-    const dbResponseData = await dbResponse.json();
 
     res.status(200).json({
       isStatusChanged: true,
