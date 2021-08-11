@@ -9,40 +9,28 @@ if (!admin.apps.length) {
   });
 }
 
-exports.postRegisterDriver = async (req, res) => {
+exports.editCarInfo = async (req, res) => {
   try {
     const formData = req.fields;
 
-    const driverInfo = JSON.parse(formData.driverInfo);
+    const driverId = formData.driverId;
     const carInfo = JSON.parse(formData.carInfo);
-    const documentUrls = JSON.parse(formData.documentUrls);
-    const location = JSON.parse(formData.location);
-    const status = JSON.parse(formData.status);
-
-    const driverId = driverInfo.driverId;
 
     const db = admin.database();
     const dbResponse = await db
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
-      .set({
-        driverInfo: driverInfo,
-        carInfo: carInfo,
-        documentUrls: documentUrls,
-        location: location,
-        status: status,
-      });
-
-    const dbResponseData = await dbResponse.json();
+      .child("carInfo")
+      .set(carInfo);
 
     res.status(200).json({
-      isDriverAdded: true,
+      isUpdated: true,
       message: "OK",
     });
   } catch (err) {
     res.status(400).json({
-      isDriverAdded: false,
+      isUpdated: false,
       error: err,
     });
   }
