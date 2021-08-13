@@ -9,6 +9,8 @@ const documentUploadController = require('../controllers/driver-controllers/uplo
 const toogleStatusContoller = require('../controllers/driver-controllers/toogle-status');
 const editDriverInfoController = require('../controllers/edit-driver-controller/edit-driver-info');
 const editCarInfoController = require('../controllers/edit-driver-controller/edit-car-info');
+const editDocumentController = require('../controllers/edit-driver-controller/edit-document');
+const editLocationController = require("../controllers/edit-driver-controller/edit-location");
 const deleleAccountController = require('../controllers/driver-controllers/delete-account');
 
 const router = express.Router();
@@ -22,6 +24,8 @@ router.post('/upload-document',documentUploadController.uploadDocument);
 router.post('/toogle-status',toogleStatusContoller.toogleStatus);
 router.post('/edit-driver-info',editDriverInfoController.editDriverInfo);
 router.post('/edit-car-info',editCarInfoController.editCarInfo);
-router.post('/delete-account',deleleAccountController.deleteAccount)
+router.post('/delete-account',deleleAccountController.deleteAccount);
+router.post('/edit-document',editDocumentController.editDocument);
+router.post('/edit-location',editLocationController.editLocation);
 
 module.exports = router;

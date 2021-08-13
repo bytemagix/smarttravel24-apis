@@ -19,14 +19,24 @@ exports.toogleStatus = async (req, res) => {
     console.log(formData);
 
     const db = admin.database();
-    const dbResponse = await db
+    let myStatus;
+    const ref = await db
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
       .child("status")
-      .set({
-          driverStatus : status,
-      });
+      .on(
+        "value",
+        (snapshot) => {
+          console.log(snapshot.val());
+          myStatus = snapshot.val();
+        },
+        (errorObj) => {
+          console.log(errorObj);
+        }
+      );
+
+      console.log("DRIVER STATUS"+myStatus);
 
     res.status(200).json({
       isStatusChanged: true,
