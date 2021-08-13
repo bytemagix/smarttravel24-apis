@@ -16,17 +16,14 @@ exports.deleteAccount = async (req, res) => {
     const driverId = formData.driverId;
 
     const db = admin.database();
-    const dbResponse = await db
-      .ref("Drivers")
-      .child("Profiles")
-      .child(driverId)
-      .remove();
+    db.ref("Drivers").child("Profiles").child(driverId).remove();
 
     res.status(200).json({
       isDeleted: true,
       message: "OK",
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       isDeleted: false,
       error: err,
