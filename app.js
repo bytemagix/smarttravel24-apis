@@ -4,6 +4,7 @@ const formidable = require("express-formidable");
 const PORT = process.env.PORT || 7000;
 const authRoutes = require("./routes/auth");
 const driverRoutes = require("./routes/drivers");
+const adminRoutes = require('./routes/admin');
 
 const app = express();
 
@@ -25,5 +26,6 @@ app.use((req, res, next) => {
 app.use(formidable());
 app.use("/auth",authRoutes);
 app.use("/drivers", driverRoutes);
+app.use("/admin", adminRoutes);
 
 app.listen(PORT);
