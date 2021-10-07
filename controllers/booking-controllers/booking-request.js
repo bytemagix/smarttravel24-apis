@@ -17,7 +17,7 @@ exports.sendBookingRequest = async (req, res) => {
     const userId = formData.userId;
 
     const db = admin.database();
-    db.ref("Bookings").child(bookingId).set({
+    db.ref("Bookings").child("Bookings").child(bookingId).set({
       bookingId: bookingId,
       userId: userId,
       source: formData.source,
