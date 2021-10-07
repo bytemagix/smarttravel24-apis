@@ -14,10 +14,12 @@ exports.sendBookingRequest = async (req, res) => {
     const formData = req.fields;
 
     const bookingId = "BID" + new Date().getTime();
+    const userId = formData.userId;
 
     const db = admin.database();
     db.ref("Bookings").child(bookingId).set({
       bookingId: bookingId,
+      userId: userId,
       source: formData.source,
       destination: formData.destination,
       fromDate: formData.fromDate,
@@ -38,6 +40,17 @@ exports.sendBookingRequest = async (req, res) => {
       pickupTime: formData.pickupTime,
       tripDescription: formData.tripDescription
     });
+
+    db.ref("Users").child("Bookings").child(userId).child(bookingId).set({
+      bookingId: bookingId,
+      userId: userId,
+      source: formData.source,
+      destination: formData.destination,
+      fromDate: formData.fromDate,
+      toDate: formData.toDate,
+      carType: formData.carType,
+      tripType: formData.tripType,
+    })
 
     res.status(200).json({
       message: "OK",
