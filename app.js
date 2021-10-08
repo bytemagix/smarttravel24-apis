@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth");
 const driverRoutes = require("./routes/drivers");
 const adminRoutes = require('./routes/admin');
 const bookingRoutes = require('./routes/booking');
+const paymentRoutes = require('./routes/payments');
 
 const app = express();
 
@@ -29,5 +30,6 @@ app.use("/auth",authRoutes);
 app.use("/drivers", driverRoutes);
 app.use("/admin", adminRoutes);
 app.use("/booking",bookingRoutes);
+app.use("/payments",paymentRoutes);
 
 app.listen(PORT);

@@ -9,14 +9,14 @@ if (!admin.apps.length) {
   });
 }
 
-exports.sendQuotation = async (req, res) => {
+exports.sendQuotationAdmin = async (req, res) => {
   try {
     const formData = req.fields;
 
     console.log(formData);
 
     const bookingId = formData.bookingId;
-    const driverId = formData.driverId;
+    const driverId = "AD"+(new Date().getTime());
 
     const db = admin.database();
     db.ref("Bookings").child("Quotations").child(bookingId).child(driverId).set({
