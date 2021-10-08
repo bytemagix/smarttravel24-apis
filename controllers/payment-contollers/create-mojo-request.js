@@ -15,7 +15,6 @@ exports.createMojoRequest = async (req, res) => {
   const formData = req.fields;
 
   const bookingId = formData.bookingId;
-  const userId = formData.userId;
   console.log(formData);
 
   try {
@@ -40,10 +39,9 @@ exports.createMojoRequest = async (req, res) => {
       { form: payload, headers: headers },
       function (error, response, body) {
         if (!error && response.statusCode == 201) {
-          storeOrder(bookingId, userId);
+          storeOrder(bookingId, formData.amount);
           res.status(200).json(body);
         } else {
-            console.log("Inside else");
           console.log(error);
         }
       }
@@ -53,11 +51,11 @@ exports.createMojoRequest = async (req, res) => {
   }
 };
 
-const storeOrder = (booking_id, user_id,) => {
+const storeOrder = (booking_id, amount) => {
   const db = admin.database();
-  const ref = db.ref("Users").child("TempOrders").child(user_id).child(booking_id);
+  const ref = db.ref("Users").child("TempOrders").child(booking_id);
   ref.set({
     bookingId: booking_id,
-    userId: user_id,
+    amount: amount,
   });
 };
