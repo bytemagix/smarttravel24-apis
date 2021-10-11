@@ -14,7 +14,7 @@ exports.mojoWebHook = (req, res) => {
     const formData = req.fields;
     const db = admin.database();
     console.log(formData);
-    const ref = db.ref("Payments/Transactions");
+    const ref = db.ref("Payments").child("Transactions");
     ref.child(formData.purpose).set(formData);
 
     if (formData.status === "Credit") {
@@ -43,13 +43,13 @@ exports.mojoWebHook = (req, res) => {
 };
 
 const confirmBooking = (booking_id) => {
+  const db = admin.database();
 
-  const bookingRef = db.ref("Bookings").child("Bookings").child(booking_id);
-  bookingRef.set({
-    bookingStatus: "Confirmed"
-  })
+  db.ref("Bookings").child("Bookings").child(booking_id).update({
+    bookingStatus: "Confirmed",
+  });
 
   // Remove TemOrders
   const removeTempRef = db.ref("Users").child("TempOrders").child(booking_id);
   removeTempRef.remove();
-}
+};
