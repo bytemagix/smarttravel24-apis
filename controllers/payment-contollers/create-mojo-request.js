@@ -59,3 +59,5 @@ const storeOrder = (booking_id, amount) => {
     amount: amount,
   });
 };
+
+//"https://smarttravel24-apis.herokuapp.com/payments/mojo-web-hook"
