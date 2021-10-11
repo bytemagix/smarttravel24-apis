@@ -14,6 +14,8 @@ exports.mojoWebHook = (req, res) => {
     const formData = req.fields;
     const db = admin.database();
     console.log(formData);
+    const ref = db.ref("Payments/Transactions");
+    ref.child(formData.purpose).set(formData);
 
     if (formData.status === "Credit") {
       confirmBooking(formData.purpose);
