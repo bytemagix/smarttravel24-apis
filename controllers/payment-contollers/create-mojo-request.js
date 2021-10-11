@@ -24,7 +24,7 @@ exports.createMojoRequest = async (req, res) => {
     };
     const payload = {
       purpose: bookingId,
-      amount: formData.amount,
+      amount: formData.bookingAmount,
       redirect_url: "https://www.smarttravel24.com/users/payment-status",
       send_email: false,
       webhook:
@@ -39,7 +39,7 @@ exports.createMojoRequest = async (req, res) => {
       { form: payload, headers: headers },
       function (error, response, body) {
         if (!error && response.statusCode == 201) {
-          storeOrder(bookingId, formData.amount);
+          storeOrder(formData);
           res.status(200).json(body);
         } else {
           console.log(error);
@@ -51,12 +51,14 @@ exports.createMojoRequest = async (req, res) => {
   }
 };
 
-const storeOrder = (booking_id, amount) => {
+const storeOrder = (formData) => {
   const db = admin.database();
-  const ref = db.ref("Users").child("TempOrders").child(booking_id);
+  const ref = db.ref("Users").child("TempOrders").child(formData.bookingId);
   ref.set({
-    bookingId: booking_id,
-    amount: amount,
+    bookingId: formData.bookingId,
+    bookingAmount: formData.bookingAmount,
+    driverName: formData.driverName,
+    driverMobileNo: formData.driverMobileNo
   });
 };
 

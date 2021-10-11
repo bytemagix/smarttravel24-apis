@@ -18,18 +18,17 @@ exports.mojoWebHook = (req, res) => {
     ref.child(formData.purpose).set(formData);
 
     if (formData.status === "Credit") {
-      confirmBooking(formData.purpose);
-      /*const tempRef = db.ref("Users").child("TempOrders").child(formData.purpose);
+      const tempRef = db.ref("Users").child("TempOrders").child(formData.purpose);
       tempRef.on(
         "value",
         (snapshot) => {
           const data = snapshot.val();
-          confirmBooking(formData.purpose);
+          confirmBooking(formData.purpose,data);
         },
         (error) => {
           console.log(error);
         }
-      );*/
+      );
     }
 
     res.status(200).json({
@@ -42,11 +41,13 @@ exports.mojoWebHook = (req, res) => {
   }
 };
 
-const confirmBooking = (booking_id) => {
+const confirmBooking = (booking_id,driver_data) => {
   const db = admin.database();
 
   db.ref("Bookings").child("Bookings").child(booking_id).update({
     bookingStatus: "Confirmed",
+    driverName: driver_data.driverName,
+    driverMobileNo: driver_data.driverMobileNo
   });
 
   // Remove TemOrders
