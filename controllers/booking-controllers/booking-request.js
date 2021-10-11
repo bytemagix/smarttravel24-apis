@@ -38,7 +38,8 @@ exports.sendBookingRequest = async (req, res) => {
       locality: formData.locality,
       landmark: formData.landmark,
       pickupTime: formData.pickupTime,
-      tripDescription: formData.tripDescription
+      tripDescription: formData.tripDescription,
+      bookingStatus: formData.bookingStatus,
     });
 
     db.ref("Users").child("Bookings").child(userId).child(bookingId).set({

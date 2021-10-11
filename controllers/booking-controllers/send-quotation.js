@@ -25,6 +25,8 @@ exports.sendQuotation = async (req, res) => {
       driverId: driverId,
       driverName: formData.driverName,
       driverMobileNo: formData.driverMobileNo,
+      carName: formData.carName,
+      carNo: formData.carNo,
       fare: formData.fare,
     });
 

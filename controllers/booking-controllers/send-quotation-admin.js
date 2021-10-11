@@ -25,8 +25,14 @@ exports.sendQuotationAdmin = async (req, res) => {
       driverId: driverId,
       driverName: formData.driverName,
       driverMobileNo: formData.driverMobileNo,
+      carName: formData.carName,
+      carNo: formData.carNo,
       fare: formData.fare,
     });
+
+    db.ref("Bookings").child("Bookings").child(bookingId).update({
+      bookingStatus: "Active"
+    })
 
     res.status(200).json({
       message: "OK",

@@ -41,13 +41,15 @@ exports.mojoWebHook = (req, res) => {
   }
 };
 
-const confirmBooking = (booking_id,driver_data) => {
+const confirmBooking = (booking_id,data) => {
   const db = admin.database();
 
   db.ref("Bookings").child("Bookings").child(booking_id).update({
     bookingStatus: "Confirmed",
-    driverName: driver_data.driverName,
-    driverMobileNo: driver_data.driverMobileNo
+    carName: data.carName,
+    carNo: data.carNo,
+    driverName: data.driverName,
+    driverMobileNo: data.driverMobileNo,
   });
 
   // Remove TemOrders
