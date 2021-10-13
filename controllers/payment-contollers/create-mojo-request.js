@@ -58,8 +58,8 @@ const storeOrder = (formData) => {
     bookingId: formData.bookingId,
     bookingAmount: formData.bookingAmount,
     driverName: formData.driverName,
-    driverMobileNo: formData.driverMobileNo
+    driverMobileNo: formData.driverMobileNo,
+    carName: formData.carName,
+    carNo: formData.carNo
   });
 };
-
-//"https://smarttravel24-apis.herokuapp.com/payments/mojo-web-hook"
