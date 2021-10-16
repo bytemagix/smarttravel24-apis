@@ -13,26 +13,42 @@ exports.postRegisterDriver = async (req, res) => {
   try {
     const formData = req.fields;
 
-    const driverInfo = JSON.parse(formData.driverInfo);
-    const carInfo = JSON.parse(formData.carInfo);
-    const documentUrls = JSON.parse(formData.documentUrls);
-    const location = JSON.parse(formData.location);
-    const status = JSON.parse(formData.status);
-
-    const driverId = driverInfo.driverId;
+    const driverId = formData.driverId;
 
     const db = admin.database();
-    const dbResponse = await db
-      .ref("Drivers")
-      .child("Profiles")
-      .child(driverId)
-      .set({
-        driverInfo: driverInfo,
-        carInfo: carInfo,
-        documentUrls: documentUrls,
-        location: location,
-        status: status,
-      });
+    db.ref("Drivers").child("Profiles").child(driverId).set({
+      driverId: formData.driverId,
+      driverName: formData.driverName,
+      driverMobileNo: formData.driverMobileNo,
+      driverEmailId: formData.driverEmailId,
+      driverDOB: formData.driverDOB,
+      driverIdType: formData.driverIdType,
+
+      carNo: formData.carNo,
+      carType: formData.carType,
+      carName: formData.carName,
+      carModel: formData.carModel,
+      fuelType: formData.fuelType,
+      noPlateType: formData.noPlateType,
+      insuranceExpiryDate: formData.insuranceExpiryDate,
+
+      dlFrontUrl: formData.dlFrontUrl,
+      dlBackUrl: formData.dlBackUrl,
+      idFrontUrl: formData.idFrontUrl,
+      idBackUrl: formData.idBackUrl,
+      rcUrl: formData.rcUrl,
+      insuranceUrl: formData.insuranceUrl,
+      pollutionUrl: formData.pollutionUrl,
+
+      city: formData.city,
+      district: formData.district,
+      state: formData.state,
+      latitude: formData.latitude,
+      longitude: formData.longitude,
+
+      driverStatus: formData.driverStatus,
+      verificationStatus: formData.verificationStatus,
+    });
 
     res.status(200).json({
       isDriverAdded: true,
