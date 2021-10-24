@@ -61,7 +61,7 @@ exports.sendBookingRequest = async (req, res) => {
       tripType: formData.tripType,
     })
 
-    sendEmailNotification();
+    sendEmailNotification(formData.passengerEmailId);
 
     res.status(200).json({
       message: "OK",
@@ -74,7 +74,7 @@ exports.sendBookingRequest = async (req, res) => {
 };
 
 
-const sendEmailNotification = () => {
+const sendEmailNotification = (userEmailId) => {
   console.log("Notification Called");
   const oAuth2Client = new google.auth.OAuth2(
     CLIENT_ID,
