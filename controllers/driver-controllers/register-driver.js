@@ -1,5 +1,6 @@
 const admin = require("firebase-admin");
 const serviceAccount = require("../../config/smarttravel24-c8fad-firebase-adminsdk-erorc-d149407dfe.json");
+const { Expo } = require("expo-server-sdk");
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -50,6 +51,8 @@ exports.postRegisterDriver = async (req, res) => {
       verificationStatus: formData.verificationStatus,
     });
 
+    adminNotification(driverId);
+
     res.status(200).json({
       isDriverAdded: true,
       message: "OK",
@@ -60,4 +63,91 @@ exports.postRegisterDriver = async (req, res) => {
       error: err,
     });
   }
+};
+
+const adminNotification = async (driverId) => {
+  const db = admin.database();
+  db.ref("Admin")
+    .child("PushTokens")
+    .on(
+      "value",
+      (snapshot) => {
+        sendAdminNotification(snapshot.val(),driverId);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+};
+
+const sendAdminNotification = async (allTokens, driver_id) => {
+  let pushTokens = [];
+  for (const key in allTokens) {
+    const token = allTokens[key].pushToken;
+    pushTokens.push(token);
+  }
+
+  let expo = new Expo();
+  let messages = [];
+
+  for (let pushToken of pushTokens) {
+    if (!Expo.isExpoPushToken(pushToken)) {
+      console.error(`Push token ${pushToken} is not a valid Expo push token`);
+      continue;
+    }
+
+    messages.push({
+      to: pushToken,
+      sound: "default",
+      body: "New Driver Registered",
+      data: { driverId: driver_id },
+    });
+  }
+
+  let chunks = expo.chunkPushNotifications(messages);
+  let tickets = [];
+  (async () => {
+    for (let chunk of chunks) {
+      try {
+        let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+        console.log(ticketChunk);
+        tickets.push(...ticketChunk);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  })();
+
+  let receiptIds = [];
+  for (let ticket of tickets) {
+    if (ticket.id) {
+      receiptIds.push(ticket.id);
+    }
+  }
+
+  let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
+  (async () => {
+    for (let chunk of receiptIdChunks) {
+      try {
+        let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+        console.log(receipts);
+
+        for (let receiptId in receipts) {
+          let { status, message, details } = receipts[receiptId];
+          if (status === "ok") {
+            continue;
+          } else if (status === "error") {
+            console.error(
+              `There was an error sending a notification: ${message}`
+            );
+            if (details && details.error) {
+              console.error(`The error code is ${details.error}`);
+            }
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  })();
 };

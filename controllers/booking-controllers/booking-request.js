@@ -65,7 +65,7 @@ exports.sendBookingRequest = async (req, res) => {
     });
 
     sendEmailNotification(formData.passengerEmailId);
-    adminNotification();
+    adminNotification(bookingId);
 
     res.status(200).json({
       message: "OK",
@@ -122,14 +122,14 @@ const sendEmailNotification = (userEmailId) => {
     });
 };
 
-const adminNotification = async () => {
+const adminNotification = async (bookingId) => {
   const db = admin.database();
   db.ref("Admin")
     .child("PushTokens")
     .on(
       "value",
       (snapshot) => {
-        sendAdminNotification(snapshot.val());
+        sendAdminNotification(snapshot.val(),bookingId);
       },
       (error) => {
         console.log(error);
@@ -137,7 +137,7 @@ const adminNotification = async () => {
     );
 };
 
-const sendAdminNotification = async (allTokens) => {
+const sendAdminNotification = async (allTokens,booking_id) => {
   let pushTokens = [];
   for (const key in allTokens) {
     const token = allTokens[key].pushToken;
@@ -157,7 +157,7 @@ const sendAdminNotification = async (allTokens) => {
       to: pushToken,
       sound: "default",
       body: "New Booking Request",
-      data: { bookingId: "BID1635153240061" },
+      data: { bookingId: booking_id },
     });
   }
 
