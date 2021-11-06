@@ -9,7 +9,7 @@ if (!admin.apps.length) {
   });
 }
 
-exports.savePushToken = async (req, res) => {
+exports.saveDriverPushToken = async (req, res) => {
   try {
     const formData = req.fields;
 
