@@ -9,26 +9,24 @@ if (!admin.apps.length) {
   });
 }
 
-exports.addCarName = async (req, res) => {
+exports.removeDriver = async (req, res) => {
   try {
     const formData = req.fields;
 
-    const carName = formData.carName;
-    const carNameId = "C"+(new Date().getTime());
+    const driverId = formData.driverId;
+    const bookingId = formData.bookingId;
+    console.log(formData);
 
     const db = admin.database();
-    db.ref("Admin").child("CarNames").child(carNameId).set({
-        carNameId : carNameId,
-        carName : carName,
-    });
-
+    db.ref("Bookings").child("TempBookings").child(bookingId).child(driverId).remove();
 
     res.status(200).json({
       message: "OK",
     });
+
   } catch (err) {
     res.status(400).json({
-      error: err,
+      error: err
     });
   }
 };

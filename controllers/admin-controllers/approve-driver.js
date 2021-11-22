@@ -17,7 +17,7 @@ exports.approveDriver = async (req, res) => {
     const verificationStatus = formData.verificationStatus;
 
     const db = admin.database();
-    db.ref("Drivers").child("Profiles").child(driverId).child("status").update({
+    db.ref("Drivers").child("Profiles").child(driverId).update({
         verificationStatus : verificationStatus,
     });
 

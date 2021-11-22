@@ -104,8 +104,11 @@ const sendEmailNotification = (userEmailId) => {
       const mailOptions = {
         from: EMAIL,
         to: userEmailId,
-        subject: "Cab Booking ( SmartTravel 24)",
-        text: `Thank You for booking SmartTravel 24. We have received your booking request. You will receive quotation within 30 minutes`,
+        subject: "Update: Booking Request Received",
+        text: `We have received your booking request. We are promised to take just 30 minutes to provide you quotation. On or before 30 minutes you are gonna receive a notification from our end.
+        
+        Thank you for booking in SmartTravel24.com
+        Stay Safe and Healthy.`,
       };
 
       const result = await transport.sendMail(mailOptions);
@@ -129,7 +132,7 @@ const adminNotification = async (bookingId) => {
     .on(
       "value",
       (snapshot) => {
-        sendAdminNotification(snapshot.val(),bookingId);
+        sendAdminNotification(snapshot.val(), bookingId);
       },
       (error) => {
         console.log(error);
@@ -137,7 +140,7 @@ const adminNotification = async (bookingId) => {
     );
 };
 
-const sendAdminNotification = async (allTokens,booking_id) => {
+const sendAdminNotification = async (allTokens, booking_id) => {
   let pushTokens = [];
   for (const key in allTokens) {
     const token = allTokens[key].pushToken;
