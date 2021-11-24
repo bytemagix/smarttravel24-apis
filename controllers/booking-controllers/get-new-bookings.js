@@ -14,11 +14,12 @@ exports.getNewBookings = async (req, res) => {
     const formData = req.fields;
 
     const carType = formData.carType;
+    const driverId = formData.driverId;
 
     const db = admin.database();
     const ref = db
       .ref("Bookings")
-      .child("Bookings")
+      .child("TempBookings")
       .on(
         "value",
         (snapshot) => {
@@ -26,15 +27,15 @@ exports.getNewBookings = async (req, res) => {
           const data = snapshot.val();
 
           const list = [];
-          for(const key in data){
-            const item = data[key];
-            if(item.carType === carType && item.bookingStatus === "New"){
-                list.push(item);
+          for (const key in data) {
+            const item = data[key][driverId];
+            if (item.carType === carType && item.bookingStatus === "New") {
+              list.push(item);
             }
           }
 
           res.status(200).json({
-            list : list
+            list: list,
           });
         },
         (errorObj) => {
@@ -43,7 +44,6 @@ exports.getNewBookings = async (req, res) => {
       );
   } catch (err) {
     res.status(400).json({
-      isStatusChanged: false,
       error: err,
     });
   }

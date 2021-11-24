@@ -23,6 +23,7 @@ exports.selectDriver = async (req, res) => {
         driverId : driverId,
         bookingId: bookingId,
         driverName: formData.driverName,
+        passengerName: formData.passengerName,
         carType: formData.carType,
         carName: formData.carName,
         bookingStatus: formData.bookingStatus
@@ -58,8 +59,11 @@ const driverNotification = async (bookingId,driver_id) => {
 };
 
 const sendDriverNotification = async (token, booking_id) => {
+  console.log(token);
   let pushTokens = [];
   pushTokens.push(token);
+
+  console.log(pushTokens);
 
   let expo = new Expo();
   let messages = [];
