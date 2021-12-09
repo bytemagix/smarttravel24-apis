@@ -14,15 +14,19 @@ exports.editLocation = async (req, res) => {
     const formData = req.fields;
 
     const driverId = formData.driverId;
-    const location = JSON.parse(formData.location);
 
     const db = admin.database();
     const dbResponse = await db
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
-      .child("location")
-      .set(location);
+      .update({
+        city: formData.city,
+        district: formData.district,
+        state: formData.state,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+      });
 
     res.status(200).json({
       isUpdated: true,

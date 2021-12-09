@@ -14,15 +14,19 @@ exports.editDriverInfo = async (req, res) => {
     const formData = req.fields;
 
     const driverId = formData.driverId;
-    const driverInfo = JSON.parse(formData.driverInfo);
 
     const db = admin.database();
     const dbResponse = await db
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
-      .child("driverInfo")
-      .set(driverInfo);
+      .update({
+        driverName: formData.driverName,
+        driverMobileNo: formData.driverMobileNo,
+        driverEmailId: formData.driverEmailId,
+        driverDOB: formData.driverDOB,
+        driverIdType: formData.driverIdType
+      });
 
     res.status(200).json({
       isUpdated: true,
