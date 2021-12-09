@@ -23,7 +23,6 @@ exports.editDocument = async (req, res) => {
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
-      .child("documentUrls")
       .update({
           [type]: url
       })
