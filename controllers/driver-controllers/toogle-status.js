@@ -24,19 +24,9 @@ exports.toogleStatus = async (req, res) => {
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
-      .child("status")
-      .on(
-        "value",
-        (snapshot) => {
-          console.log(snapshot.val());
-          myStatus = snapshot.val();
-        },
-        (errorObj) => {
-          console.log(errorObj);
-        }
-      );
-
-      console.log("DRIVER STATUS"+myStatus);
+      .update({
+        diverStatus: !formData.status,
+      });
 
     res.status(200).json({
       isStatusChanged: true,

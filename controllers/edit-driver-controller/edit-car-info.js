@@ -12,6 +12,7 @@ if (!admin.apps.length) {
 exports.editCarInfo = async (req, res) => {
   try {
     const formData = req.fields;
+    console.log(formData);
 
     const driverId = formData.driverId;
 
