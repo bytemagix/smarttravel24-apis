@@ -14,18 +14,24 @@ exports.toogleStatus = async (req, res) => {
     const formData = req.fields;
 
     const driverId = formData.driverId;
-    const status = formData.status;
+    let status = formData.status;
     console.log(status);
     console.log(formData);
+    let data;
+    if(status === "true"){
+      data = "false";
+    }else{
+      data = "true";
+    }
+    console.log(data);
 
     const db = admin.database();
-    let myStatus;
     const ref = await db
       .ref("Drivers")
       .child("Profiles")
       .child(driverId)
       .update({
-        diverStatus: !formData.status,
+        driverStatus: data
       });
 
     res.status(200).json({
