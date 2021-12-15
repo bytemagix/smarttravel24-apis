@@ -16,10 +16,12 @@ exports.getConfirmedBookings = async (req, res) => {
     const carType = formData.carType;
     const driverId = formData.driverId;
 
+    console.log(formData);
+
     const db = admin.database();
     const ref = db
       .ref("Bookings")
-      .child("TempBookings")
+      .child("Bookings")
       .on(
         "value",
         (snapshot) => {
@@ -27,11 +29,19 @@ exports.getConfirmedBookings = async (req, res) => {
           const data = snapshot.val();
 
           const list = [];
-          for (const key in data) {
-            const item = data[key][driverId];
-            if (item.carType === carType && item.bookingStatus === "Confirmed") {
-              list.push(item);
+
+          try {
+            for (const key in data) {
+              const item = data[key][driverId];
+              if (
+                item.driverId === driverId &&
+                item.bookingStatus === "Confirmed"
+              ) {
+                list.push(item);
+              }
             }
+          } catch (error) {
+            console.log(error);
           }
 
           res.status(200).json({

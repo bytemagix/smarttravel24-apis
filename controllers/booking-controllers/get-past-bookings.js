@@ -9,7 +9,7 @@ if (!admin.apps.length) {
   });
 }
 
-exports.getNewBookings = async (req, res) => {
+exports.getPastBookings = async (req, res) => {
   try {
     const formData = req.fields;
 
@@ -21,7 +21,7 @@ exports.getNewBookings = async (req, res) => {
     const db = admin.database();
     const ref = db
       .ref("Bookings")
-      .child("TempBookings")
+      .child("Bookings")
       .on(
         "value",
         (snapshot) => {
@@ -29,15 +29,19 @@ exports.getNewBookings = async (req, res) => {
           const data = snapshot.val();
 
           const list = [];
-          for (const key in data) {
-            const item = data[key][driverId];
-            try {
-              if (item.carType === carType && item.bookingStatus === "New") {
+
+          try {
+            for (const key in data) {
+              const item = data[key][driverId];
+              if (
+                item.driverId === driverId &&
+                item.bookingStatus === "Completed"
+              ) {
                 list.push(item);
               }
-            } catch (error) {
-              console.log("My Error", error);
             }
+          } catch (error) {
+            console.log(error);
           }
 
           res.status(200).json({
@@ -45,14 +49,10 @@ exports.getNewBookings = async (req, res) => {
           });
         },
         (errorObj) => {
-          res.status(400).json({
-            error: errorObj,
-          });
-          console.log("Having Error", errorObj);
+          console.log(errorObj);
         }
       );
   } catch (err) {
-    console.log("Special Error ", err);
     res.status(400).json({
       error: err,
     });

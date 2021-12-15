@@ -7,6 +7,7 @@ const SendQuotationAdminController = require("../controllers/booking-controllers
 const GetNewBookingsController = require("../controllers/booking-controllers/get-new-bookings");
 const GetActiveBookingsController = require("../controllers/booking-controllers/get-active-bookings");
 const GetConfirmedBookingsController = require("../controllers/booking-controllers/get-confirmed-bookings");
+const GetPastBookingsController = require("../controllers/booking-controllers/get-past-bookings");
 
 router.post('/send-booking-request',BookingRequestController.sendBookingRequest);
 router.post('/send-quotation', SendQuotationController.sendQuotation);
@@ -14,6 +15,7 @@ router.post('/send-quotation-admin', SendQuotationAdminController.sendQuotationA
 router.post('/get-new-bookings',GetNewBookingsController.getNewBookings);
 router.post('/get-active-bookings',GetActiveBookingsController.getActiveBookings);
 router.post('/get-confirmed-bookings',GetConfirmedBookingsController.getConfirmedBookings);
+router.post('/get-past-bookings',GetPastBookingsController.getPastBookings);
 
 
 module.exports = router;

@@ -29,8 +29,12 @@ exports.getActiveBookings = async (req, res) => {
           const list = [];
           for (const key in data) {
             const item = data[key][driverId];
-            if (item.carType === carType && item.bookingStatus === "Active") {
-              list.push(item);
+            try {
+              if (item.carType === carType && item.bookingStatus === "Active") {
+                list.push(item);
+              }
+            } catch (error) {
+              console.log("My Error", error);
             }
           }
 
@@ -39,6 +43,9 @@ exports.getActiveBookings = async (req, res) => {
           });
         },
         (errorObj) => {
+          res.status(400).json({
+            error: errorObj,
+          });
           console.log(errorObj);
         }
       );
