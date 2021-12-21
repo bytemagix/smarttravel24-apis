@@ -12,6 +12,10 @@ const CLIENT_ID =
   "934526704033-kp5skiepcqfd4gr0ke1u6474r2qcvvmj.apps.googleusercontent.com";
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
 
+// const accountSid = "AC70e6a6112693ed86ae88f43499900ccc";
+// const authToken = "[Redacted]";
+// const client = require("twilio")(accountSid, authToken);
+
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -50,7 +54,12 @@ exports.sendQuotation = async (req, res) => {
       bookingStatus: "Active",
     });
 
-    sendEmailNotification(formData.passengerEmailId, formData.fare);
+    sendEmailNotification(
+      formData.passengerEmailId,
+      formData.fare,
+      formData.tripType
+    );
+   // sendWhatsappNotification();
 
     res.status(200).json({
       message: "OK",
@@ -62,8 +71,16 @@ exports.sendQuotation = async (req, res) => {
   }
 };
 
-const sendEmailNotification = (userEmailId, fare) => {
+const sendEmailNotification = (userEmailId, fare, tripType) => {
   console.log("Notification Called");
+
+  let effectiveFare;
+  if (tripType === "One Way") {
+    effectiveFare = +fare + 150;
+  } else {
+    effectiveFare = +fare + 300;
+  }
+
   const oAuth2Client = new google.auth.OAuth2(
     CLIENT_ID,
     CLIENT_SECRET,
@@ -93,7 +110,7 @@ const sendEmailNotification = (userEmailId, fare) => {
         subject: "Update: Quotation for your Booking Request",
         text: `Dear Customer, 
 
-        We are happy to inform you that your journey quotation for booking request is an amount of ₹${fare} INR for traveling to your chosen destination.
+        We are happy to inform you that your journey quotation for booking request is an amount of ₹${effectiveFare} INR for traveling to your chosen destination.
         
         If you are happy with this deal you may proceed for a hassle free and comfortable journey with our fully sanitised cabs. 
         
@@ -112,4 +129,15 @@ const sendEmailNotification = (userEmailId, fare) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+const sendWhatsappNotification = async () => {
+  client.messages
+    .create({
+      body: "You Have a received a new quotation",
+      from: "whatsapp:+14155238886",
+      to: "whatsapp:+919864143674",
+    })
+    .then((message) => console.log(message.sid))
+    .done();
 };

@@ -18,7 +18,8 @@
     "googleapis": "^89.0.0",
     "nodemailer": "^6.7.0",
     "nodemon": "^2.0.9",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "twilio": "^3.71.3"
   },
   "devDependencies": {
     "dotenv": "^10.0.0"

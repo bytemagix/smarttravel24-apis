@@ -48,7 +48,7 @@ exports.sendQuotationAdmin = async (req, res) => {
       bookingStatus: "Active",
     });
 
-    sendEmailNotification(formData.passengerEmailId, formData.fare);
+    sendEmailNotification(formData.passengerEmailId, formData.fare, formData.tripType);
 
     res.status(200).json({
       message: "OK",
@@ -60,8 +60,15 @@ exports.sendQuotationAdmin = async (req, res) => {
   }
 };
 
-const sendEmailNotification = (userEmailId, fare) => {
+const sendEmailNotification = (userEmailId, fare, tripType) => {
   console.log("Notification Called");
+  let effectiveFare;
+  if(tripType === "One Way"){
+    effectiveFare = (+fare)+150;
+  }else{
+    effectiveFare = (+fare)+300;
+  }
+
   const oAuth2Client = new google.auth.OAuth2(
     CLIENT_ID,
     CLIENT_SECRET,
@@ -90,7 +97,7 @@ const sendEmailNotification = (userEmailId, fare) => {
         to: userEmailId,
         subject: "Update: Quotation for your Booking Request",
         text: `Dear Customer, 
-        We are happy to inform you that your journey quotation for booking request is an amount of ₹${fare} INR for traveling to your chosen destination.
+        We are happy to inform you that your journey quotation for booking request is an amount of ₹${effectiveFare} INR for traveling to your chosen destination.
         If you are happy with this deal you may proceed for a hassle free and comfortable journey with our fully sanitised cabs. 
         If you are not satisfied with this deal you just relax and chill we are promised send you more quotations so that, you can choose and sort your journey with cheapest price. `,
       };
