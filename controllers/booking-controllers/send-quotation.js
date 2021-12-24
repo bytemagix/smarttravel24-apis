@@ -61,6 +61,8 @@ exports.sendQuotation = async (req, res) => {
     );
    // sendWhatsappNotification();
 
+   storeUserNotification(formData);
+
     res.status(200).json({
       message: "OK",
     });
@@ -141,3 +143,18 @@ const sendWhatsappNotification = async () => {
     .then((message) => console.log(message.sid))
     .done();
 };
+
+const storeUserNotification = (data) => {
+  const db = admin.database();
+  db.ref("Users").child("Notifications").child(data.userId).child(data.driverId).set({
+    bookingId: data.bookingId,
+    userId: data.userId,
+    driverId: data.driverId,
+    driverName: data.driverName,
+    driverMobileNo: data.driverMobileNo,
+    carName: data.carName,
+    carNo: data.carNo,
+    fare: data.fare,
+    message: data.message,
+  });
+}

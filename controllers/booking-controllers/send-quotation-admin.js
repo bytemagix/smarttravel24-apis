@@ -48,7 +48,13 @@ exports.sendQuotationAdmin = async (req, res) => {
       bookingStatus: "Active",
     });
 
-    sendEmailNotification(formData.passengerEmailId, formData.fare, formData.tripType);
+    sendEmailNotification(
+      formData.passengerEmailId,
+      formData.fare,
+      formData.tripType
+    );
+
+    storeUserNotification(formData, driverId);
 
     res.status(200).json({
       message: "OK",
@@ -63,10 +69,10 @@ exports.sendQuotationAdmin = async (req, res) => {
 const sendEmailNotification = (userEmailId, fare, tripType) => {
   console.log("Notification Called");
   let effectiveFare;
-  if(tripType === "One Way"){
-    effectiveFare = (+fare)+150;
-  }else{
-    effectiveFare = (+fare)+300;
+  if (tripType === "One Way") {
+    effectiveFare = +fare + 150;
+  } else {
+    effectiveFare = +fare + 300;
   }
 
   const oAuth2Client = new google.auth.OAuth2(
@@ -114,4 +120,31 @@ const sendEmailNotification = (userEmailId, fare, tripType) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+const storeUserNotification = (data, quotationId) => {
+  console.log("Store User Notification Called");
+  console.log(data, quotationId);
+
+  try {
+    const database = admin.database();
+    database
+      .ref("Users")
+      .child("Notifications")
+      .child(data.userId)
+      .child(data.bookingId)
+      .child(quotationId)
+      .set({
+        bookingId: data.bookingId,
+        userId: data.userId,
+        driverName: data.driverName,
+        driverMobileNo: data.driverMobileNo,
+        carName: data.carName,
+        carNo: data.carNo,
+        fare: data.fare,
+        qRead: false,
+      });
+  } catch (err) {
+    console.log(err);
+  }
 };

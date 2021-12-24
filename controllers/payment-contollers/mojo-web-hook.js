@@ -55,4 +55,12 @@ const confirmBooking = (booking_id,data) => {
   // Remove TemOrders
   const removeTempRef = db.ref("Users").child("TempOrders").child(booking_id);
   removeTempRef.remove();
+
+  // Remove Quotaions
+  const removeQuotationsRef = db.ref("Bookings").child("Quotations").child(booking_id);
+  removeQuotationsRef.remove();
+
+  //Remove Notifications
+  const removeNotificationsRef = db.ref("Users").child("Notifications").child(data.userId).child(booking_id);
+  removeNotificationsRef.remove();
 };
