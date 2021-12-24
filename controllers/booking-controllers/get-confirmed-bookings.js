@@ -22,7 +22,7 @@ exports.getConfirmedBookings = async (req, res) => {
     const ref = db
       .ref("Bookings")
       .child("Bookings")
-      .on(
+      .once(
         "value",
         (snapshot) => {
           console.log(snapshot.val());

@@ -129,7 +129,7 @@ const adminNotification = async (bookingId) => {
   const db = admin.database();
   db.ref("Admin")
     .child("PushTokens")
-    .on(
+    .once(
       "value",
       (snapshot) => {
         sendAdminNotification(snapshot.val(), bookingId);

@@ -44,10 +44,10 @@ exports.selectDriver = async (req, res) => {
 
 const driverNotification = async (bookingId,driver_id) => {
   const db = admin.database();
-  db.ref("Users")
+  db.ref("Drivers")
     .child("PushTokens")
     .child(driver_id)
-    .on(
+    .once(
       "value",
       (snapshot) => {
         sendDriverNotification(snapshot.val().pushToken, bookingId);

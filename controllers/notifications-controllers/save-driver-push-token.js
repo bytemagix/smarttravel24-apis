@@ -18,7 +18,7 @@ exports.saveDriverPushToken = async (req, res) => {
     console.log(formData);
 
     const db = admin.database();
-    db.ref("Users").child("PushTokens").child(userId).set({
+    db.ref("Drivers").child("PushTokens").child(userId).set({
       userId: userId,
       pushToken : formData.pushToken
     });

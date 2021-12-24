@@ -16,7 +16,7 @@ exports.getDriverInfo = (req, res) => {
     const db = admin.database();
     const ref = db.ref(`Drivers/Profiles/${driverId}`);
 
-    ref.on(
+    ref.once(
       "value",
       (snapshot) => {
         res.status(200).json(snapshot.val());

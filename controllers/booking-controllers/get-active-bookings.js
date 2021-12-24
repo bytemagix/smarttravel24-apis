@@ -20,7 +20,7 @@ exports.getActiveBookings = async (req, res) => {
     const ref = db
       .ref("Bookings")
       .child("TempBookings")
-      .on(
+      .once(
         "value",
         (snapshot) => {
           console.log(snapshot.val());
