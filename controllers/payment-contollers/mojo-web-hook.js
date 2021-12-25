@@ -60,6 +60,9 @@ const confirmBooking = (booking_id,data) => {
   const removeTempRef = db.ref("Users").child("TempOrders").child(booking_id);
   removeTempRef.remove();
 
+  const removeTempBookings = db.ref("Bookings").child("TempBookings").child(booking_id);
+  removeTempBookings.remove();
+
   // Remove Quotaions
   const removeQuotationsRef = db.ref("Bookings").child("Quotations").child(booking_id);
   removeQuotationsRef.remove();
