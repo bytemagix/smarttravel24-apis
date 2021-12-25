@@ -40,6 +40,7 @@ exports.sendQuotation = async (req, res) => {
       .child(driverId)
       .set({
         bookingId: bookingId,
+        quotationId: driverId,
         userId: formData.userId,
         driverId: driverId,
         driverName: formData.driverName,

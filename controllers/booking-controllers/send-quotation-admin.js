@@ -136,6 +136,7 @@ const storeUserNotification = (data, quotationId) => {
       .child(quotationId)
       .set({
         bookingId: data.bookingId,
+        quotationId: quotationId,
         userId: data.userId,
         driverName: data.driverName,
         driverMobileNo: data.driverMobileNo,
