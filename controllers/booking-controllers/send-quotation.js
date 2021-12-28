@@ -146,6 +146,13 @@ const sendWhatsappNotification = async () => {
 };
 
 const storeUserNotification = (data) => {
+  let effectiveFare;
+  if (data.tripType === "One Way") {
+    effectiveFare = +data.fare + 150;
+  } else {
+    effectiveFare = +data.fare + 300;
+  }
+
   const db = admin.database();
   db.ref("Users").child("Notifications").child(data.userId).child(data.driverId).set({
     bookingId: data.bookingId,
@@ -155,7 +162,7 @@ const storeUserNotification = (data) => {
     driverMobileNo: data.driverMobileNo,
     carName: data.carName,
     carNo: data.carNo,
-    fare: data.fare,
+    fare: effectiveFare,
     message: data.message,
   });
 }

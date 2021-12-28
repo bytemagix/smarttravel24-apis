@@ -126,12 +126,14 @@ const sendEmailNotification = (userEmailId) => {
 };
 
 const adminNotification = async (bookingId) => {
+  console.log("Admin Notification Called");
   const db = admin.database();
   db.ref("Admin")
     .child("PushTokens")
     .once(
       "value",
       (snapshot) => {
+        console.log("Admin Notification Called Inside Once");
         sendAdminNotification(snapshot.val(), bookingId);
       },
       (error) => {
@@ -141,6 +143,7 @@ const adminNotification = async (bookingId) => {
 };
 
 const sendAdminNotification = async (allTokens, booking_id) => {
+  console.log("Send Admin Notification Called");
   let pushTokens = [];
   for (const key in allTokens) {
     const token = allTokens[key].pushToken;

@@ -126,6 +126,13 @@ const storeUserNotification = (data, quotationId) => {
   console.log("Store User Notification Called");
   console.log(data, quotationId);
 
+  let effectiveFare;
+  if (data.tripType === "One Way") {
+    effectiveFare = +data.fare + 150;
+  } else {
+    effectiveFare = +data.fare + 300;
+  }
+
   try {
     const database = admin.database();
     database
@@ -142,7 +149,7 @@ const storeUserNotification = (data, quotationId) => {
         driverMobileNo: data.driverMobileNo,
         carName: data.carName,
         carNo: data.carNo,
-        fare: data.fare,
+        fare: effectiveFare,
         qRead: false,
       });
   } catch (err) {
