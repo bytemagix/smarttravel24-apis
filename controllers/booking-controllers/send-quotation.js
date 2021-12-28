@@ -54,15 +54,23 @@ exports.sendQuotation = async (req, res) => {
     db.ref("Bookings").child("Bookings").child(bookingId).update({
       bookingStatus: "Active",
     });
+    
+    db.ref("Bookings")
+      .child("TempBookings")
+      .child(bookingId)
+      .child(driverId)
+      .update({
+        bookingStatus: "Active",
+      });
 
     sendEmailNotification(
       formData.passengerEmailId,
       formData.fare,
       formData.tripType
     );
-   // sendWhatsappNotification();
+    // sendWhatsappNotification();
 
-   storeUserNotification(formData);
+    storeUserNotification(formData);
 
     res.status(200).json({
       message: "OK",
@@ -154,15 +162,20 @@ const storeUserNotification = (data) => {
   }
 
   const db = admin.database();
-  db.ref("Users").child("Notifications").child(data.userId).child(data.driverId).set({
-    bookingId: data.bookingId,
-    userId: data.userId,
-    driverId: data.driverId,
-    driverName: data.driverName,
-    driverMobileNo: data.driverMobileNo,
-    carName: data.carName,
-    carNo: data.carNo,
-    fare: effectiveFare,
-    message: data.message,
-  });
-}
+  db.ref("Users")
+    .child("Notifications")
+    .child(data.userId)
+    .child(data.bookingId)
+    .child(data.driverId)
+    .set({
+      bookingId: data.bookingId,
+      userId: data.userId,
+      driverId: data.driverId,
+      driverName: data.driverName,
+      driverMobileNo: data.driverMobileNo,
+      carName: data.carName,
+      carNo: data.carNo,
+      fare: effectiveFare,
+      message: data.message,
+    });
+};

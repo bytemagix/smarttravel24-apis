@@ -107,7 +107,7 @@ const sendDriverNotification = async (token, booking_id) => {
     messages.push({
       to: pushToken,
       sound: "default",
-      body: "New Booking Request",
+      body: "Booking Confirmed",
       data: { bookingId: booking_id },
     });
   }
