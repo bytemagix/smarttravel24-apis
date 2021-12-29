@@ -54,7 +54,7 @@ exports.sendQuotation = async (req, res) => {
     db.ref("Bookings").child("Bookings").child(bookingId).update({
       bookingStatus: "Active",
     });
-    
+
     db.ref("Bookings")
       .child("TempBookings")
       .child(bookingId)
@@ -176,6 +176,7 @@ const storeUserNotification = (data) => {
       carName: data.carName,
       carNo: data.carNo,
       fare: effectiveFare,
+      qRead: false,
       message: data.message,
     });
 };
