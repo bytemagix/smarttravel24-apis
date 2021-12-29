@@ -49,6 +49,7 @@ exports.sendQuotation = async (req, res) => {
         carNo: formData.carNo,
         fare: formData.fare,
         message: formData.message,
+        tripType: formData.tripType,
       });
 
     db.ref("Bookings").child("Bookings").child(bookingId).update({
@@ -154,6 +155,7 @@ const sendWhatsappNotification = async () => {
 };
 
 const storeUserNotification = (data) => {
+  console.log(data);
   let effectiveFare;
   if (data.tripType === "One Way") {
     effectiveFare = +data.fare + 150;
@@ -178,5 +180,6 @@ const storeUserNotification = (data) => {
       fare: effectiveFare,
       qRead: false,
       message: data.message,
+      tripType: data.tripType,
     });
 };

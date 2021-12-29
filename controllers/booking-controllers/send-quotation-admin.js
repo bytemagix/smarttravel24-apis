@@ -42,6 +42,7 @@ exports.sendQuotationAdmin = async (req, res) => {
         carName: formData.carName,
         carNo: formData.carNo,
         fare: formData.fare,
+        tripType: formData.tripType,
       });
 
     db.ref("Bookings").child("Bookings").child(bookingId).update({
@@ -151,6 +152,7 @@ const storeUserNotification = (data, quotationId) => {
         carNo: data.carNo,
         fare: effectiveFare,
         qRead: false,
+        tripType: data.tripType,
       });
   } catch (err) {
     console.log(err);
