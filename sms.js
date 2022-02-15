@@ -5,8 +5,8 @@ const client = require('twilio')(accountSid, authToken);
 client.messages 
       .create({ 
          body: 'Your Twilio code is 1238432', 
-         from: 'whatsapp:+14155238886',       
-         to: 'whatsapp:+919864143674' 
+         from: '+19034004981',       
+         to: '+919864143674' 
        }) 
       .then(message => console.log(message)) 
       .done();
