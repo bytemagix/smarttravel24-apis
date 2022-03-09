@@ -3,6 +3,8 @@ const serviceAccount = require("../../config/smarttravel24-c8fad-firebase-admins
 
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
+const fast2sms = require("fast-two-sms");
+const shortUrl = require("node-url-shortener");
 
 const EMAIL = "services.smarttravel24@gmail.com";
 const REFRESH_TOKEN =
@@ -68,6 +70,14 @@ exports.sendQuotation = async (req, res) => {
       formData.passengerEmailId,
       formData.fare,
       formData.tripType
+    );
+
+    sendSMS(
+      formData.passengerMobileNo,
+      formData.fare,
+      formData.tripType,
+      bookingId,
+      driverId
     );
     // sendWhatsappNotification();
 
@@ -183,4 +193,35 @@ const storeUserNotification = (data) => {
       message: data.message,
       tripType: data.tripType,
     });
+};
+
+const sendSMS = async (userMobileNo, fare, tripType, bookingId, driverId) => {
+  let effectiveFare;
+  if (tripType === "One Way") {
+    effectiveFare = +fare + 150;
+  } else {
+    effectiveFare = +fare + 300;
+  }
+
+  let longUrl = `https://www.smarttravel24.com/users/my-bookings/checkout/${bookingId}/${driverId}`;
+  let shorteneduUrl = "";
+
+  await shortUrl.short(longUrl, function (err, url) {
+    shorteneduUrl = url;
+    console.log(url);
+  });
+
+  console.log(shorteneduUrl);
+
+  let messages = `${longUrl}`;
+
+  console.log("SMS Called");
+  var options = {
+    authorization:
+      "AqaSx0rW7XpwP8l6Mf9ZCemQ5OKH1YokBbUDRNcyF4IGghntsJMlfEutpHUSgkIDnJoZhLKwa3jcyv2r",
+    message: messages,
+    numbers: [userMobileNo],
+  };
+  const SMS = await fast2sms.sendMessage(options);
+  console.log(SMS);
 };

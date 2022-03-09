@@ -2,6 +2,7 @@ const admin = require("firebase-admin");
 const serviceAccount = require("../../config/smarttravel24-c8fad-firebase-adminsdk-erorc-d149407dfe.json");
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
+const shortUrl = require("node-url-shortener");
 
 const EMAIL = "services.smarttravel24@gmail.com";
 const REFRESH_TOKEN =
@@ -10,6 +11,7 @@ const CLIENT_SECRET = "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";
 const CLIENT_ID =
   "934526704033-kp5skiepcqfd4gr0ke1u6474r2qcvvmj.apps.googleusercontent.com";
 const REDIRECT_URI = "https://developers.google.com/oauthplayground";
+const fast2sms = require("fast-two-sms");
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -56,6 +58,13 @@ exports.sendQuotationAdmin = async (req, res) => {
     );
 
     storeUserNotification(formData, driverId);
+    sendSMS(
+      formData.passengerMobileNo,
+      formData.fare,
+      formData.tripType,
+      bookingId,
+      driverId
+    );
 
     res.status(200).json({
       message: "OK",
@@ -104,7 +113,7 @@ const sendEmailNotification = (userEmailId, fare, tripType) => {
         to: userEmailId,
         subject: "Update: Quotation for your Booking Request",
         text: `Dear Customer, 
-        We are happy to inform you that your journey quotation for booking request is an amount of ₹${effectiveFare} INR for traveling to your chosen destination.
+        We are happy to inform you that your journey quotation for booking request is an amount of ₹ ${effectiveFare} INR for traveling to your chosen destination.
         If you are happy with this deal you may proceed for a hassle free and comfortable journey with our fully sanitised cabs. 
         If you are not satisfied with this deal you just relax and chill we are promised send you more quotations so that, you can choose and sort your journey with cheapest price. `,
       };
@@ -157,4 +166,35 @@ const storeUserNotification = (data, quotationId) => {
   } catch (err) {
     console.log(err);
   }
+};
+
+const sendSMS = async (userMobileNo, fare, tripType, bookingId, driverId) => {
+  let effectiveFare;
+  if (tripType === "One Way") {
+    effectiveFare = +fare + 150;
+  } else {
+    effectiveFare = +fare + 300;
+  }
+
+  let longUrl = `https://www.smarttravel24.com/users/my-bookings/checkout/${bookingId}/${driverId}`;
+  let shorteneduUrl = "";
+
+  await shortUrl.short(longUrl, function (err, url) {
+    shorteneduUrl = url;
+    console.log(url);
+  });
+
+  console.log(shorteneduUrl);
+
+  let messages = `${longUrl}`;
+
+  console.log("SMS Called");
+  var options = {
+    authorization:
+      "AqaSx0rW7XpwP8l6Mf9ZCemQ5OKH1YokBbUDRNcyF4IGghntsJMlfEutpHUSgkIDnJoZhLKwa3jcyv2r",
+    message: messages,
+    numbers: [userMobileNo],
+  };
+  const SMS = await fast2sms.sendMessage(options);
+  console.log(SMS);
 };
