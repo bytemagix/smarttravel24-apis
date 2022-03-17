@@ -19,30 +19,34 @@ exports.selectDriver = async (req, res) => {
     console.log(formData);
 
     const db = admin.database();
-    db.ref("Bookings").child("TempBookings").child(bookingId).child(driverId).set({
-        driverId : driverId,
+    db.ref("Bookings")
+      .child("TempBookings")
+      .child(bookingId)
+      .child(driverId)
+      .set({
+        driverId: driverId,
         bookingId: bookingId,
         driverName: formData.driverName,
         passengerName: formData.passengerName,
         carType: formData.carType,
         carName: formData.carName,
-        bookingStatus: formData.bookingStatus
-    });
+        city: formData.city,
+        bookingStatus: formData.bookingStatus,
+      });
 
-    driverNotification(bookingId,driverId);
+    driverNotification(bookingId, driverId);
 
     res.status(200).json({
       message: "OK",
     });
-
   } catch (err) {
     res.status(400).json({
-      error: err
+      error: err,
     });
   }
 };
 
-const driverNotification = async (bookingId,driver_id) => {
+const driverNotification = async (bookingId, driver_id) => {
   const db = admin.database();
   db.ref("Drivers")
     .child("PushTokens")
