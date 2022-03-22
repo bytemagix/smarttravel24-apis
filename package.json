@@ -17,6 +17,7 @@
     "fast-two-sms": "^3.0.0",
     "firebase-admin": "^9.10.0",
     "googleapis": "^89.0.0",
+    "haversine-distance": "^1.2.1",
     "node-url-shortener": "^2.0.1",
     "nodemailer": "^6.7.0",
     "nodemon": "^2.0.9",
