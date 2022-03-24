@@ -16,7 +16,13 @@ exports.getFilteredDrivers = async (req, res) => {
   console.log("filter Called");
   const carType = formData.selectedCarType;
   // console.log(formData);
-  const selectedCoordinate = formData.selectedCoordinate;
+  let selectedCoordinate;
+  try {
+    selectedCoordinate = JSON.parse(formData.selectedCoordinate);
+  } catch (err) {}
+
+  console.log("Selected Coordinate", selectedCoordinate);
+  console.log(formData);
 
   try {
     const db = admin.database();
@@ -29,10 +35,12 @@ exports.getFilteredDrivers = async (req, res) => {
         let filteredData = [];
         for (const key in data) {
           const item = data[key];
+
           const driverCoordinate = {
             latitude: item.latitude,
             longitude: item.longitude,
           };
+          console.log("Driver Coordinate", driverCoordinate);
           //   console.log(selectedCoordinate, driverCoordinate);
           if (!selectedCoordinate) {
             if (carType === "All") {
@@ -42,7 +50,7 @@ exports.getFilteredDrivers = async (req, res) => {
             }
           } else {
             const distance = haversine(selectedCoordinate, driverCoordinate);
-            console.log(haversine(selectedCoordinate, driverCoordinate));
+            console.log(distance);
             if (carType === "All" && distance < 50000) {
               filteredData.push(item);
             } else if (item.carType === carType && distance < 50000) {
@@ -65,6 +73,7 @@ exports.getFilteredDrivers = async (req, res) => {
 };
 
 const excludeSelected = async (list, bookingId, res) => {
+  console.log("list", list);
   try {
     const db = admin.database();
     const ref = db.ref(`Bookings/TempBookings/${bookingId}`);
@@ -79,14 +88,6 @@ const excludeSelected = async (list, bookingId, res) => {
           selectedList.push(item);
         }
 
-        // console.log(selectedList);
-        // console.log(selectedList);
-        // Exclude Selected
-        // const filteredData = list.filter((item) => {
-        //   selectedList.map((selected) => {
-        //     return item.driverId !== selected.driverId;
-        //   });
-        // });
         let result = list.filter(
           (o1) => !selectedList.some((o2) => o1.driverId === o2.driverId)
         );
