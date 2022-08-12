@@ -14,6 +14,7 @@ const editLocationController = require("../controllers/edit-driver-controller/ed
 const deleleAccountController = require("../controllers/driver-controllers/delete-account");
 const getFilteredDriversController = require("../controllers/driver-controllers/get-filtered-drivers");
 const getSelectedDriversController = require("../controllers/driver-controllers/get-selected-drivers");
+const getAllDriversController = require("../controllers/driver-controllers/get-all-drivers");
 
 const router = express.Router();
 
@@ -43,5 +44,7 @@ router.post(
   "/get-selected-drivers",
   getSelectedDriversController.getSelectedDrivers
 );
+
+router.get("/get-all-drivers",getAllDriversController.getAllDrivers);
 
 module.exports = router;
