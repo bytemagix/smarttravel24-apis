@@ -69,7 +69,9 @@ exports.sendQuotation = async (req, res) => {
     sendEmailNotification(
       formData.passengerEmailId,
       formData.fare,
-      formData.tripType
+      formData.tripType,
+      bookingId,
+      driverId,
     );
 
     sendSMS(
@@ -93,14 +95,14 @@ exports.sendQuotation = async (req, res) => {
   }
 };
 
-const sendEmailNotification = (userEmailId, fare, tripType) => {
+const sendEmailNotification = (userEmailId, fare, tripType,booking_id,driver_id) => {
   console.log("Notification Called");
 
   let effectiveFare;
   if (tripType === "One Way") {
-    effectiveFare = +fare + 150;
+    effectiveFare = +fare + 200;
   } else {
-    effectiveFare = +fare + 300;
+    effectiveFare = +fare + 400;
   }
 
   const oAuth2Client = new google.auth.OAuth2(
@@ -134,7 +136,7 @@ const sendEmailNotification = (userEmailId, fare, tripType) => {
 
         We are happy to inform you that your journey quotation for booking request is an amount of ₹${effectiveFare} INR for traveling to your chosen destination.
         
-        If you are happy with this deal you may proceed for a hassle free and comfortable journey with our fully sanitised cabs. 
+        If you are happy with this deal you may proceed for a hassle free and comfortable journey with our fully sanitised cabs. Click the link to confirm your booking https://www.smarttravel24.com/users/my-bookings/checkout/${booking_id}/${driver_id} 
         
         If you are not satisfied with this deal you just relax and chill we are promised send you more quotations so that, you can choose and sort your journey with cheapest price. `,
       };

@@ -13,28 +13,54 @@ if (!admin.apps.length) {
 exports.selectDriver = async (req, res) => {
   try {
     const formData = req.fields;
+    const bookingData = JSON.parse(formData.bookingData);
+    const selectedDrivers = JSON.parse(formData.selectedDrivers);
+    console.log(selectedDrivers);
 
-    const driverId = formData.driverId;
-    const bookingId = formData.bookingId;
-    console.log(formData);
+    selectedDrivers.map((item) => {
+      const driverId = item.driverId;
+      const bookingId = bookingData.bookingId;
 
-    const db = admin.database();
-    db.ref("Bookings")
-      .child("TempBookings")
-      .child(bookingId)
-      .child(driverId)
-      .set({
-        driverId: driverId,
-        bookingId: bookingId,
-        driverName: formData.driverName,
-        passengerName: formData.passengerName,
-        carType: formData.carType,
-        carName: formData.carName,
-        city: formData.city,
-        bookingStatus: formData.bookingStatus,
-      });
+      const db = admin.database();
+      db.ref("Bookings")
+        .child("TempBookings")
+        .child(bookingId)
+        .child(driverId)
+        .set({
+          driverId: item.driverId,
+          bookingId: bookingData.bookingId,
+          driverName: item.driverName,
+          passengerName: bookingData.passengerName,
+          carType: item.carType,
+          carName: item.carName,
+          city: item.city,
+          bookingStatus: bookingData.bookingStatus,
+        });
 
-    driverNotification(bookingId, driverId);
+      driverNotification(bookingData.bookingId, item.driverId);
+    });
+
+    // const driverId = formData.driverId;
+    // const bookingId = formData.bookingId;
+    // console.log(formData);
+
+    // const db = admin.database();
+    // db.ref("Bookings")
+    //   .child("TempBookings")
+    //   .child(bookingId)
+    //   .child(driverId)
+    //   .set({
+    //     driverId: driverId,
+    //     bookingId: bookingId,
+    //     driverName: formData.driverName,
+    //     passengerName: formData.passengerName,
+    //     carType: formData.carType,
+    //     carName: formData.carName,
+    //     city: formData.city,
+    //     bookingStatus: formData.bookingStatus,
+    //   });
+
+    // driverNotification(bookingId, driverId);
 
     res.status(200).json({
       message: "OK",
