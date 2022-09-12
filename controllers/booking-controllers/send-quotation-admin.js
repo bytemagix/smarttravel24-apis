@@ -140,9 +140,9 @@ const storeUserNotification = (data, quotationId) => {
 
   let effectiveFare;
   if (data.tripType === "One Way") {
-    effectiveFare = +data.fare + 150;
+    effectiveFare = +data.fare + 200;
   } else {
-    effectiveFare = +data.fare + 300;
+    effectiveFare = +data.fare + 400;
   }
 
   try {
