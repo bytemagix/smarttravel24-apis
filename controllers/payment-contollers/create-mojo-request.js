@@ -19,8 +19,8 @@ exports.createMojoRequest = async (req, res) => {
 
   try {
     const headers = {
-      "X-Api-Key": keys.MOJO_TEST_X_API_KEY,
-      "X-Auth-Token": keys.MOJO_TEST_X_AUTH_TOKEN,
+      "X-Api-Key": keys.MOJO_LIVE_X_API_KEY,
+      "X-Auth-Token": keys.MOJO_LIVE_X_AUTH_TOKEN,
     };
     const payload = {
       purpose: bookingId,
@@ -35,7 +35,8 @@ exports.createMojoRequest = async (req, res) => {
     };
 
     request.post(
-      "https://test.instamojo.com/api/1.1/payment-requests/",
+      'https://www.instamojo.com/api/1.1/payment-requests/',
+      // "https://test.instamojo.com/api/1.1/payment-requests/",
       { form: payload, headers: headers },
       function (error, response, body) {
         if (!error && response.statusCode == 201) {

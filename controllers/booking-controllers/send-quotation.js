@@ -81,7 +81,7 @@ exports.sendQuotation = async (req, res) => {
       bookingId,
       driverId
     );
-    // sendWhatsappNotification();
+    sendWhatsappNotification();
 
     storeUserNotification(formData);
 
